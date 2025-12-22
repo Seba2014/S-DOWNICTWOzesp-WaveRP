@@ -1,0 +1,228 @@
+/* Definicja zmiennych dla łatwego zarządzania motywami */
+:root {
+    --bg-gradient: radial-gradient(circle at top, #1e1e1e 0%, #0a0a0a 100%);
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --accent: #d4af37; /* Królewskie złoto */
+    --text: #ffffff;
+    --text-muted: #a0a0a0;
+    --border: rgba(212, 175, 55, 0.3);
+    --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* Klasa dla trybu jasnego */
+.light-mode {
+    --bg-gradient: radial-gradient(circle at top, #ffffff 0%, #e0e0e0 100%);
+    --card-bg: rgba(0, 0, 0, 0.05);
+    --accent: #8e6d10; /* Ciemniejsze złoto dla kontrastu */
+    --text: #1a1a1a;
+    --text-muted: #555555;
+    --border: rgba(142, 109, 16, 0.3);
+    --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Podstawowe ustawienia strony */
+body {
+    background: var(--bg-gradient);
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.4s ease;
+    overflow-x: hidden;
+}
+
+/* --- NAGŁÓWEK I LOGO --- */
+.header {
+    width: 100%;
+    padding: 30px 50px;
+    display: flex;
+    justify-content: flex-end;
+    box-sizing: border-box;
+}
+
+.header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    width: 150px;
+    height: auto;
+    filter: drop-shadow(0 0 10px var(--accent));
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05) rotate(2deg);
+}
+
+/* --- PRZEŁĄCZNIK TRYBU (SWITCH) --- */
+.theme-switch-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 22px;
+}
+
+.switch input { opacity: 0; width: 0; height: 0; }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #333;
+    transition: .4s;
+    border-radius: 20px;
+    border: 1px solid var(--accent);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px; width: 14px;
+    left: 4px; bottom: 3px;
+    background-color: var(--accent);
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider { background-color: var(--accent); }
+input:checked + .slider:before { transform: translateX(22px); background-color: #fff; }
+
+/* --- KONTENER GŁÓWNY --- */
+.container {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-bottom: 50px;
+}
+
+/* --- GŁÓWNE PRZYCISKI --- */
+.main-btn {
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    padding: 30px;
+    font-family: 'Cinzel', serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow);
+    text-transform: uppercase;
+}
+
+.main-btn:hover {
+    background: var(--accent);
+    color: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+}
+
+/* --- TREŚĆ ROZWIJANA --- */
+.content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 0 0 15px 15px;
+    margin-top: -10px; /* Połączenie z przyciskiem */
+}
+
+.role-group {
+    padding: 25px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+}
+
+.role-group:hover {
+    background: rgba(212, 175, 55, 0.02);
+}
+
+.role-group:last-child { border-bottom: none; }
+
+/* --- TYTUŁY RÓL (np. PREZES SĄDU) --- */
+.role-title {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    margin: 0 0 15px 0;
+    text-transform: uppercase;
+    border-left: 4px solid var(--accent);
+    padding-left: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.role-title span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    background: var(--border);
+    padding: 2px 10px;
+    border-radius: 20px;
+    color: var(--text);
+}
+
+/* --- CZŁONKOWIE (mgr Imię Nazwisko) --- */
+.member-item {
+    margin-bottom: 15px;
+    padding-left: 20px;
+}
+
+.member-item:last-child { margin-bottom: 0; }
+
+.member-name {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+}
+
+.member-id {
+    display: block;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.member {
+    color: var(--text-muted);
+    font-style: italic;
+    padding-left: 20px;
+}
+
+/* Responsywność dla urządzeń mobilnych */
+@media (max-width: 600px) {
+    .main-btn { font-size: 22px; padding: 20px; }
+    .header { padding: 20px; }
+    .logo { width: 100px; }
+    .member-name { font-size: 18px; }
+}

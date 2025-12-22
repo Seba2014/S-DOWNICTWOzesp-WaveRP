@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ewidencja Personelu Sądowego</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-mode">
+
+    <div class="header">
+        <div class="header-right">
+            <img src="sadlogo.png" alt="Logo" class="logo">
+            <div class="theme-switch-container">
+                <span id="theme-label">Tryb Ciemny</span>
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <main class="container">
+        <div class="category">
+            <button class="main-btn" onclick="toggleDropdown('sedziowie')">SĘDZIOWIE</button>
+            <div id="sedziowie" class="content">
+                <div class="role-group">
+                    <p class="role-title">PREZES SĄDU <span>0/1</span></p>
+                    <div class="member">Brak</div>
+                </div>
+                <div class="role-group">
+                    <p class="role-title">WICE PREZES SĄDU OKRĘGOWEGO <span>0/1</span></p>
+                    <div class="member">Brak</div>
+                </div>
+                <div class="role-group">
+                    <p class="role-title">SĘDZIA SĄDU OKRĘGOWEGO <span>1/10</span></p>
+                    <div class="member-item">
+                        <span class="member-name">mgr Marek Moczypięta</span>
+                        <span class="member-id">&lt;@1354876613333877090&gt;</span>
+                    </div>
+                </div>
+                <div class="role-group">
+                    <p class="role-title">ASSESOR SĄDU OKRĘGOWEGO <span>1/∞</span></p>
+                    <div class="member-item">
+                        <span class="member-name">mgr Bartek Jabkoński</span>
+                        <span class="member-id">&lt;@1013118119595753552&gt;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            <button class="main-btn" onclick="toggleDropdown('prokuratorzy')">PROKURATORZY</button>
+            <div id="prokuratorzy" class="content">
+                <div class="role-group">
+                    <p class="role-title">PROKURATOR OKRĘGOWY <span>1/1</span></p>
+                    <div class="member-item">
+                        <span class="member-name">mgr Jakub Bravo</span>
+                        <span class="member-id">&lt;@1003437926308384858&gt;</span>
+                    </div>
+                </div>
+                <div class="role-group">
+                    <p class="role-title">PROKURATOR PROKURATURY OKRĘGOWEJ <span>0/100</span></p>
+                    <div class="member">Brak</div>
+                </div>
+                <div class="role-group">
+                    <p class="role-title">ASSESOR PROKURATURY OKRĘGOWEJ <span>5/∞</span></p>
+                    <div class="member-item">
+                        <span class="member-name">mgr Salvatore Norii</span>
+                        <span class="member-id">&lt;@1327693532965900288&gt;</span>
+                    </div>
+                    <div class="member-item">
+                        <span class="member-name">mgr Alan Strachal</span>
+                        <span class="member-id">&lt;@1364034760720257166&gt;</span>
+                    </div>
+                    <div class="member-item">
+                        <span class="member-name">mgr Giovanni Romano</span>
+                        <span class="member-id">&lt;@1197605612465434627&gt;</span>
+                    </div>
+                    <div class="member-item">
+                        <span class="member-name">mgr Tomasz Problem</span>
+                        <span class="member-id">&lt;@1452342600131678311&gt;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            <button class="main-btn" onclick="toggleDropdown('adwokaci')">ADWOKACI</button>
+            <div id="adwokaci" class="content">
+                <div class="role-group">
+                    <p class="role-title">PREZES WYDZIAŁU ADWOKACKIEGO <span>0/1</span></p>
+                    <div class="member">Brak</div>
+                </div>
+                <div class="role-group">
+                    <p class="role-title">ADWOKACI <span>(1/100)</span></p>
+                    <div class="member-item">
+                        <span class="member-name">mgr Kacper Robak</span>
+                        <span class="member-id">&lt;@713042537367076874&gt;</span>
+                    </div>
+                    <div class="member-item">
+                        <span class="member-name">mgr Joahim Watkins</span>
+                        <span class="member-id">&lt;@1375530529444728833&gt;</span>
+                    </div>
+                </div>
+                <div class="role-group">
+                    <p class="role-title">APLIKACI ADWOKATURY <span>(1/∞)</span></p>
+                    <div class="member-item">
+                        <span class="member-name">mgr Bożydar Nocul</span>
+                        <span class="member-id">&lt;@747410287145254933&gt;</span>
+                    </div>
+                    <div class="member-item">
+                        <span class="member-name">mgr Maciej Stonoga</span>
+                        <span class="member-id">&lt;@1275188314189594714&gt;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
