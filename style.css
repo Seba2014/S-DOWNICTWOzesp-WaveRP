@@ -1,115 +1,23 @@
-:root {
-    --main-bg: #0d0d0d;
-    --card-bg: #1a1a1a;
-    --accent: #d4af37;
-    --text-primary: #ffffff;
-    --text-secondary: #b3b3b3;
-    --header-gradient: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
-    --glow: 0 0 15px rgba(212, 175, 55, 0.2);
+function toggleDropdown(id) {
+    const content = document.getElementById(id);
+    if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+    } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+    }
 }
 
-.light-mode {
-    --main-bg: #f4f4f4;
-    --card-bg: #ffffff;
-    --accent: #8e6d10;
-    --text-primary: #1a1a1a;
-    --text-secondary: #555555;
-    --header-gradient: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
-    --glow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+const themeToggle = document.getElementById('theme-toggle');
+const themeLabel = document.getElementById('theme-label');
 
-body {
-    background-color: var(--main-bg);
-    color: var(--text-primary);
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    transition: background 0.4s ease;
-}
-
-/* Header */
-.top-bar {
-    background: var(--header-gradient);
-    padding: 20px 0;
-    border-bottom: 2px solid var(--accent);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.header-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-}
-
-.logo { height: 70px; filter: drop-shadow(0 0 8px var(--accent)); }
-
-/* Toggle Switch */
-.controls { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 12px; }
-.theme-toggle { position: relative; width: 50px; height: 24px; }
-.theme-toggle input { opacity: 0; width: 0; height: 0; }
-.slider {
-    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #333; transition: .4s; border-radius: 34px; border: 1px solid var(--accent);
-}
-.slider:before {
-    position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 3px;
-    background-color: var(--accent); transition: .4s; border-radius: 50%;
-}
-input:checked + .slider { background-color: var(--accent); }
-input:checked + .slider:before { transform: translateX(26px); background-color: white; }
-
-/* Dashboard */
-.dashboard { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-
-.expand-btn {
-    width: 100%;
-    background: var(--card-bg);
-    border: 1px solid var(--accent);
-    padding: 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    transition: 0.3s;
-}
-
-.expand-btn:hover { background: var(--accent); color: black; box-shadow: var(--glow); }
-
-.btn-text { font-family: 'Cinzel', serif; font-size: 24px; font-weight: 900; letter-spacing: 2px; }
-
-/* Cards */
-.dropdown-content {
-    max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;
-}
-
-.card {
-    background: var(--card-bg);
-    border: 1px solid rgba(212, 175, 55, 0.1);
-    border-radius: 12px;
-    padding: 20px;
-    transition: 0.3s;
-}
-
-.card.active { border-left: 4px solid var(--accent); }
-
-.card-header {
-    font-family: 'Cinzel', serif; font-size: 14px; color: var(--accent);
-    font-weight: 700; margin-bottom: 10px; display: flex; justify-content: space-between;
-}
-
-.badge { background: rgba(212, 175, 55, 0.1); padding: 2px 8px; border-radius: 4px; font-size: 11px; }
-
-.name { font-size: 18px; font-weight: 600; margin: 0; }
-.id { font-size: 11px; color: var(--text-secondary); margin: 5px 0 0 0; font-family: monospace; }
-.empty { font-style: italic; color: var(--text-secondary); font-size: 14px; }
-
-@media (max-width: 768px) {
-    .dropdown-content { grid-template-columns: 1fr; }
-}
+themeToggle.addEventListener('change', () => {
+    if (themeToggle.checked) {
+        document.body.classList.remove('dark-mode');
+        document.body.classList.add('light-mode');
+        themeLabel.textContent = "Tryb Jasny";
+    } else {
+        document.body.classList.remove('light-mode');
+        document.body.classList.add('dark-mode');
+        themeLabel.textContent = "Tryb Ciemny";
+    }
+});
