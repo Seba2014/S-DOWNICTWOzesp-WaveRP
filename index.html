@@ -9,116 +9,95 @@
 </head>
 <body class="dark-mode">
 
-    <header class="top-bar">
-        <div class="header-container">
+    <div class="header">
+        <div class="header-right">
             <img src="sadlogo.png" alt="Logo" class="logo">
-            <div class="controls">
+            <div class="theme-switch-container">
                 <span id="theme-label">Tryb Ciemny</span>
-                <label class="theme-toggle">
-                    <input type="checkbox" id="theme-toggle-input">
-                    <span class="slider"></span>
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider round"></span>
                 </label>
             </div>
         </div>
-    </header>
+    </div>
 
-    <main class="dashboard">
-        <section class="court-section">
-            <button class="expand-btn" onclick="toggleDropdown('sedziowie')">
-                <span class="btn-text">SĘDZIOWIE</span>
-                <span class="btn-icon">⚖️</span>
-            </button>
-            <div id="sedziowie" class="dropdown-content">
-                <div class="card">
-                    <div class="card-header">PREZES SĄDU <span class="badge">0/1</span></div>
-                    <div class="card-body"><span class="empty">Brak obsady</span></div>
+    <main class="container">
+        <div class="category">
+            <button class="main-btn" onclick="toggleDropdown('sedziowie')">SĘDZIOWIE</button>
+            <div id="sedziowie" class="content">
+                <div class="role-group">
+                    <p class="role-title">PREZES SĄDU <span>0/1</span></p>
+                    <div class="member">Brak</div>
                 </div>
-                <div class="card">
-                    <div class="card-header">WICE PREZES SĄDU OKRĘGOWEGO <span class="badge">0/1</span></div>
-                    <div class="card-body"><span class="empty">Brak obsady</span></div>
+                <div class="role-group">
+                    <p class="role-title">WICE PREZES SĄDU OKRĘGOWEGO <span>0/1</span></p>
+                    <div class="member">Brak</div>
                 </div>
-                <div class="card active">
-                    <div class="card-header">SĘDZIA SĄDU OKRĘGOWEGO <span class="badge">1/10</span></div>
-                    <div class="card-body">
-                        <div class="user-info">
-                            <p class="name">mgr Marek Moczypięta</p>
-                            <p class="id">ID: 1354876613333877090</p>
-                        </div>
+                <div class="role-group">
+                    <p class="role-title">SĘDZIA SĄDU OKRĘGOWEGO <span>1/10</span></p>
+                    <div class="member-item">
+                        <span class="member-name">mgr Marek Moczypięta</span>
+                        <span class="member-id">&lt;@1354876613333877090&gt;</span>
                     </div>
                 </div>
-                <div class="card active">
-                    <div class="card-header">ASSESOR SĄDU OKRĘGOWEGO <span class="badge">1/∞</span></div>
-                    <div class="card-body">
-                        <div class="user-info">
-                            <p class="name">mgr Bartek Jabkoński</p>
-                            <p class="id">ID: 1013118119595753552</p>
-                        </div>
+                <div class="role-group">
+                    <p class="role-title">ASSESOR SĄDU OKRĘGOWEGO <span>1/∞</span></p>
+                    <div class="member-item">
+                        <span class="member-name">mgr Bartek Jabkoński</span>
+                        <span class="member-id">&lt;@1013118119595753552&gt;</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section class="court-section">
-            <button class="expand-btn" onclick="toggleDropdown('prokuratorzy')">
-                <span class="btn-text">PROKURATORZY</span>
-                <span class="btn-icon">📜</span>
-            </button>
-            <div id="prokuratorzy" class="dropdown-content">
-                <div class="card active">
-                    <div class="card-header">PROKURATOR OKRĘGOWY <span class="badge">1/1</span></div>
-                    <div class="card-body">
-                        <div class="user-info">
-                            <p class="name">mgr Jakub Bravo</p>
-                            <p class="id">ID: 1003437926308384858</p>
-                        </div>
+        <div class="category">
+            <button class="main-btn" onclick="toggleDropdown('prokuratorzy')">PROKURATORZY</button>
+            <div id="prokuratorzy" class="content">
+                <div class="role-group">
+                    <p class="role-title">PROKURATOR OKRĘGOWY <span>1/1</span></p>
+                    <div class="member-item">
+                        <span class="member-name">mgr Jakub Bravo</span>
+                        <span class="member-id">&lt;@1003437926308384858&gt;</span>
                     </div>
                 </div>
-                <div class="card active">
-                    <div class="card-header">PROKURATOR PROKURATURY OKRĘGOWEJ <span class="badge">1/100</span></div>
-                    <div class="card-body">
-                        <div class="user-info">
-                            <p class="name">mgr Marek Las</p>
-                            <p class="id">ID: 1312833342139273266</p>
-                        </div>
+                <div class="role-group">
+                    <p class="role-title">PROKURATOR PROKURATURY OKRĘGOWEJ <span>1/100</span></p>
+                    <div class="member-item">
+                        <span class="member-name">mgr Marek Las</span>
+                        <span class="member-id">&lt;@1312833342139273266&gt;</span>
                     </div>
                 </div>
-                <div class="card active">
-                    <div class="card-header">ASSESOR PROKURATURY OKRĘGOWEJ <span class="badge">1/∞</span></div>
-                    <div class="card-body">
-                        <div class="user-info">
-                            <p class="name">mgr Giovanni Romano</p>
-                            <p class="id">ID: 1197605612465434627</p>
-                        </div>
+                <div class="role-group">
+                    <p class="role-title">ASSESOR PROKURATURY OKRĘGOWEJ <span>1/∞</span></p>
+                    <div class="member-item">
+                        <span class="member-name">mgr Giovanni Romano</span>
+                        <span class="member-id">&lt;@1197605612465434627&gt;</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section class="court-section">
-            <button class="expand-btn" onclick="toggleDropdown('adwokaci')">
-                <span class="btn-text">ADWOKACI</span>
-                <span class="btn-icon">💼</span>
-            </button>
-            <div id="adwokaci" class="dropdown-content">
-                <div class="card">
-                    <div class="card-header">PREZES WYDZIAŁU ADWOKACKIEGO <span class="badge">0/1</span></div>
-                    <div class="card-body"><span class="empty">Brak obsady</span></div>
+        <div class="category">
+            <button class="main-btn" onclick="toggleDropdown('adwokaci')">ADWOKACI</button>
+            <div id="adwokaci" class="content">
+                <div class="role-group">
+                    <p class="role-title">PREZES WYDZIAŁU ADWOKACKIEGO <span>0/1</span></p>
+                    <div class="member">Brak</div>
                 </div>
-                <div class="card">
-                    <div class="card-header">ADWOKACI <span class="badge">0/100</span></div>
-                    <div class="card-body"><span class="empty">Brak obsady</span></div>
+                <div class="role-group">
+                    <p class="role-title">ADWOKACI <span>(0/100)</span></p>
+                    <div class="member">Brak</div>
                 </div>
-                <div class="card active">
-                    <div class="card-header">APLIKACI ADWOKATURY <span class="badge">1/∞</span></div>
-                    <div class="card-body">
-                        <div class="user-info">
-                            <p class="name">mgr Igor Kozioł</p>
-                            <p class="id">ID: 1170424235718606868</p>
-                        </div>
+                <div class="role-group">
+                    <p class="role-title">APLIKACI ADWOKATURY <span>(1/∞)</span></p>
+                    <div class="member-item">
+                        <span class="member-name">mgr Igor Kozioł</span>
+                        <span class="member-id">&lt;@1170424235718606868&gt;</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </main>
 
     <script src="script.js"></script>
