@@ -3,102 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ewidencja Personelu Sądowego</title>
+    <title>Ewidencja Personelu</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
-<body class="dark-mode">
+<body>
 
     <div class="header">
-        <div class="header-right">
+        <div class="logo-container">
             <img src="sadlogo.png" alt="Logo" class="logo">
-            <div class="theme-switch-container">
-                <span id="theme-label">Tryb Ciemny</span>
-                <label class="switch">
-                    <input type="checkbox" id="theme-toggle">
-                    <span class="slider round"></span>
-                </label>
-            </div>
         </div>
     </div>
 
-    <main class="container">
-        <div class="category">
-            <button class="main-btn" onclick="toggleDropdown('sedziowie')">SĘDZIOWIE</button>
-            <div id="sedziowie" class="content">
-                <div class="role-group">
-                    <p class="role-title">PREZES SĄDU <span>0/1</span></p>
-                    <div class="member">Brak</div>
+    <div class="container">
+        
+        <button class="main-btn" onclick="toggleDropdown('sedziowie')">SĘDZIOWIE</button>
+        <div id="sedziowie" class="content">
+            <div class="role-group">
+                <p class="role-title">PREZES SĄDU <span class="badge">0/1</span></p>
+                <div class="member-empty">Brak</div>
+            </div>
+            <div class="role-group">
+                <p class="role-title">WICE PREZES SĄDU OKRĘGOWEGO <span class="badge">0/1</span></p>
+                <div class="member-empty">Brak</div>
+            </div>
+            <div class="role-group">
+                <p class="role-title">SĘDZIA SĄDU OKRĘGOWEGO <span class="badge">1/10</span></p>
+                <div class="member-item">
+                    <span class="member-name">mgr Marek Moczypięta</span>
+                    <span class="member-id">&lt;@1354876613333877090&gt;</span>
                 </div>
-                <div class="role-group">
-                    <p class="role-title">WICE PREZES SĄDU OKRĘGOWEGO <span>0/1</span></p>
-                    <div class="member">Brak</div>
-                </div>
-                <div class="role-group">
-                    <p class="role-title">SĘDZIA SĄDU OKRĘGOWEGO <span>1/10</span></p>
-                    <div class="member-item">
-                        <span class="member-name">mgr Marek Moczypięta</span>
-                        <span class="member-id">&lt;@1354876613333877090&gt;</span>
-                    </div>
-                </div>
-                <div class="role-group">
-                    <p class="role-title">ASSESOR SĄDU OKRĘGOWEGO <span>1/∞</span></p>
-                    <div class="member-item">
-                        <span class="member-name">mgr Bartek Jabkoński</span>
-                        <span class="member-id">&lt;@1013118119595753552&gt;</span>
-                    </div>
+            </div>
+            <div class="role-group">
+                <p class="role-title">ASSESOR SĄDU OKRĘGOWEGO <span class="badge">1/∞</span></p>
+                <div class="member-item">
+                    <span class="member-name">mgr Bartek Jabkoński</span>
+                    <span class="member-id">&lt;@1013118119595753552&gt;</span>
                 </div>
             </div>
         </div>
 
-        <div class="category">
-            <button class="main-btn" onclick="toggleDropdown('prokuratorzy')">PROKURATORZY</button>
-            <div id="prokuratorzy" class="content">
-                <div class="role-group">
-                    <p class="role-title">PROKURATOR OKRĘGOWY <span>1/1</span></p>
-                    <div class="member-item">
-                        <span class="member-name">mgr Jakub Bravo</span>
-                        <span class="member-id">&lt;@1003437926308384858&gt;</span>
-                    </div>
+        <button class="main-btn" onclick="toggleDropdown('prokuratorzy')">PROKURATORZY</button>
+        <div id="prokuratorzy" class="content">
+            <div class="role-group">
+                <p class="role-title">PROKURATOR OKRĘGOWY <span class="badge">1/1</span></p>
+                <div class="member-item">
+                    <span class="member-name">mgr Jakub Bravo</span>
+                    <span class="member-id">&lt;@1003437926308384858&gt;</span>
                 </div>
-                <div class="role-group">
-                    <p class="role-title">PROKURATOR PROKURATURY OKRĘGOWEJ <span>1/100</span></p>
-                    <div class="member-item">
-                        <span class="member-name">mgr Marek Las</span>
-                        <span class="member-id">&lt;@1312833342139273266&gt;</span>
-                    </div>
+            </div>
+            <div class="role-group">
+                <p class="role-title">PROKURATOR PROKURATURY OKRĘGOWEJ <span class="badge">1/100</span></p>
+                <div class="member-item">
+                    <span class="member-name">mgr Marek Las</span>
+                    <span class="member-id">&lt;@1312833342139273266&gt;</span>
                 </div>
-                <div class="role-group">
-                    <p class="role-title">ASSESOR PROKURATURY OKRĘGOWEJ <span>1/∞</span></p>
-                    <div class="member-item">
-                        <span class="member-name">mgr Giovanni Romano</span>
-                        <span class="member-id">&lt;@1197605612465434627&gt;</span>
-                    </div>
+            </div>
+            <div class="role-group">
+                <p class="role-title">ASSESOR PROKURATURY OKRĘGOWEJ <span class="badge">1/∞</span></p>
+                <div class="member-item">
+                    <span class="member-name">mgr Giovanni Romano</span>
+                    <span class="member-id">&lt;@1197605612465434627&gt;</span>
                 </div>
             </div>
         </div>
 
-        <div class="category">
-            <button class="main-btn" onclick="toggleDropdown('adwokaci')">ADWOKACI</button>
-            <div id="adwokaci" class="content">
-                <div class="role-group">
-                    <p class="role-title">PREZES WYDZIAŁU ADWOKACKIEGO <span>0/1</span></p>
-                    <div class="member">Brak</div>
-                </div>
-                <div class="role-group">
-                    <p class="role-title">ADWOKACI <span>(0/100)</span></p>
-                    <div class="member">Brak</div>
-                </div>
-                <div class="role-group">
-                    <p class="role-title">APLIKACI ADWOKATURY <span>(1/∞)</span></p>
-                    <div class="member-item">
-                        <span class="member-name">mgr Igor Kozioł</span>
-                        <span class="member-id">&lt;@1170424235718606868&gt;</span>
-                    </div>
+        <button class="main-btn" onclick="toggleDropdown('adwokaci')">ADWOKACI</button>
+        <div id="adwokaci" class="content">
+            <div class="role-group">
+                <p class="role-title">PREZES WYDZIAŁU ADWOKACKIEGO <span class="badge">0/1</span></p>
+                <div class="member-empty">Brak</div>
+            </div>
+            <div class="role-group">
+                <p class="role-title">ADWOKACI <span class="badge">(0/100)</span></p>
+                <div class="member-empty">Brak</div>
+            </div>
+            <div class="role-group">
+                <p class="role-title">APLIKACI ADWOKATURY <span class="badge">(1/∞)</span></p>
+                <div class="member-item">
+                    <span class="member-name">mgr Igor Kozioł</span>
+                    <span class="member-id">&lt;@1170424235718606868&gt;</span>
                 </div>
             </div>
         </div>
-    </main>
+
+    </div>
 
     <script src="script.js"></script>
 </body>
