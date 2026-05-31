@@ -3,93 +3,825 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ewidencja Personelu</title>
+    <title>State Panel ERP</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo-container">
-            <img src="sadlogo.png" alt="Logo" class="logo">
+    <!-- ======================== TOAST CONTAINER ======================== -->
+    <div id="toast-container"></div>
+
+    <!-- ======================== MODULE 0: AUTH OVERLAY ======================== -->
+    <div id="auth-overlay" class="overlay">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                    <circle cx="40" cy="40" r="38" stroke="#2196F3" stroke-width="2" fill="none"/>
+                    <path d="M25 55 L40 20 L55 55" stroke="#2196F3" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="30" y1="45" x2="50" y2="45" stroke="#2196F3" stroke-width="2"/>
+                    <circle cx="40" cy="40" r="35" stroke="#2196F3" stroke-width="0.5" opacity="0.3"/>
+                    <text x="40" y="72" text-anchor="middle" fill="#2196F3" font-size="8" font-family="Montserrat">STATE PANEL</text>
+                </svg>
+            </div>
+            <h2 class="auth-title">STATE PANEL ERP</h2>
+            <p class="auth-subtitle">System Zarządzania Stanowego</p>
+            <div class="auth-form">
+                <div class="input-group">
+                    <label for="auth-login">Login</label>
+                    <input type="text" id="auth-login" placeholder="Wpisz login..." autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="auth-pass">Hasło</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="auth-pass" placeholder="Wpisz hasło...">
+                        <span class="toggle-eye" id="toggle-pass">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <button id="btn-login" class="btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                        <polyline points="10 17 15 12 10 7"/>
+                        <line x1="15" y1="12" x2="3" y2="12"/>
+                    </svg>
+                    ZALOGUJ
+                </button>
+                <p id="auth-error" class="error-msg"></p>
+                <div class="auth-divider">
+                    <span>lub</span>
+                </div>
+                <button id="btn-show-register" class="btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="8.5" cy="7" r="4"/>
+                        <line x1="20" y1="8" x2="20" y2="14"/>
+                        <line x1="23" y1="11" x2="17" y2="11"/>
+                    </svg>
+                    Kreacja postaci (PIN OOC)
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="container">
-        
-        <button class="main-btn" onclick="toggleDropdown('sedziowie')">SĘDZIOWIE</button>
-        <div id="sedziowie" class="content">
-            <div class="role-group">
-                <p class="role-title">PREZES SĄDU <span class="badge">0/1</span></p>
-                <div class="member-empty">Brak</div>
+    <!-- ======================== MODULE 0: CHARACTER CREATION MODAL ======================== -->
+    <div id="modal-register" class="modal-overlay" style="display:none;">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="8.5" cy="7" r="4"/>
+                        <line x1="20" y1="8" x2="20" y2="14"/>
+                        <line x1="23" y1="11" x2="17" y2="11"/>
+                    </svg>
+                    KREACJA POSTACI
+                </h3>
+                <button class="modal-close" data-close="modal-register">&times;</button>
             </div>
-            <div class="role-group">
-                <p class="role-title">WICE PREZES SĄDU OKRĘGOWEGO <span class="badge">0/1</span></p>
-                <div class="member-empty">Brak</div>
-            </div>
-            <div class="role-group">
-                <p class="role-title">SĘDZIA SĄDU OKRĘGOWEGO <span class="badge">1/10</span></p>
-                <div class="member-item">
-                    <span class="member-name">mgr Marek Moczypięta</span>
-                    <span class="member-id">&lt;@1354876613333877090&gt;</span>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label for="reg-pin">PIN OOC (wymagany)</label>
+                    <input type="password" id="reg-pin" placeholder="Wpisz PIN OOC...">
                 </div>
-            </div>
-            <div class="role-group">
-                <p class="role-title">ASSESOR SĄDU OKRĘGOWEGO <span class="badge">1/∞</span></p>
-                <div class="member-item">
-                    <span class="member-name">mgr Bartek Jabkoński</span>
-                    <span class="member-id">&lt;@1013118119595753552&gt;</span>
+                <button id="btn-verify-pin" class="btn-primary btn-sm">Zweryfikuj PIN</button>
+                <div id="reg-form" style="display:none;">
+                    <hr class="divider">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="reg-login">Login</label>
+                            <input type="text" id="reg-login" placeholder="Login do systemu">
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-pass">Hasło</label>
+                            <input type="password" id="reg-pass" placeholder="Hasło">
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-email">Email</label>
+                            <input type="email" id="reg-email" placeholder="email@statemail.sa">
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-name">Imię</label>
+                            <input type="text" id="reg-name" placeholder="Imię postaci">
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-surname">Nazwisko</label>
+                            <input type="text" id="reg-surname" placeholder="Nazwisko postaci">
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-dob">Data urodzenia</label>
+                            <input type="date" id="reg-dob">
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-gender">Płeć</label>
+                            <select id="reg-gender">
+                                <option value="">-- Wybierz --</option>
+                                <option value="Mężczyzna">Mężczyzna</option>
+                                <option value="Kobieta">Kobieta</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-nat">Narodowość</label>
+                            <input type="text" id="reg-nat" placeholder="np. Amerykanin">
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-height">Wzrost (cm)</label>
+                            <input type="number" id="reg-height" placeholder="175">
+                        </div>
+                    </div>
+                    <button id="btn-create-char" class="btn-primary btn-block">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        UTWÓRZ POSTAĆ
+                    </button>
                 </div>
             </div>
         </div>
-
-        <button class="main-btn" onclick="toggleDropdown('prokuratorzy')">PROKURATORZY</button>
-        <div id="prokuratorzy" class="content">
-            <div class="role-group">
-                <p class="role-title">PROKURATOR OKRĘGOWY <span class="badge">1/1</span></p>
-                <div class="member-item">
-                    <span class="member-name">mgr Jakub Bravo</span>
-                    <span class="member-id">&lt;@1003437926308384858&gt;</span>
-                </div>
-            </div>
-            <div class="role-group">
-                <p class="role-title">PROKURATOR PROKURATURY OKRĘGOWEJ <span class="badge">1/100</span></p>
-                <div class="member-item">
-                    <span class="member-name">mgr Marek Las</span>
-                    <span class="member-id">&lt;@1312833342139273266&gt;</span>
-                </div>
-            </div>
-            <div class="role-group">
-                <p class="role-title">ASSESOR PROKURATURY OKRĘGOWEJ <span class="badge">1/∞</span></p>
-                <div class="member-item">
-                    <span class="member-name">mgr Giovanni Romano</span>
-                    <span class="member-id">&lt;@1197605612465434627&gt;</span>
-                </div>
-            </div>
-        </div>
-
-        <button class="main-btn" onclick="toggleDropdown('adwokaci')">ADWOKACI</button>
-        <div id="adwokaci" class="content">
-            <div class="role-group">
-                <p class="role-title">PREZES NRA <span class="badge">0/1</span></p>
-                <div class="member-empty">Brak</div>
-            </div>
-            <div class="role-group">
-                <p class="role-title">ADWOKACI <span class="badge">(0/100)</span></p>
-                <div class="member-empty">Brak</div>
-            </div>
-            <div class="role-group">
-                <p class="role-title">APLIKACI ADWOKATURY <span class="badge">(1/∞)</span></p>
-                <div class="member-item">
-                    <span class="member-name">mgr Igor Kozioł</span>
-                    <span class="member-id">&lt;@1170424235718606868&gt;</span>
-                </div>
-            </div>
-        </div>
-
     </div>
+
+    <!-- ======================== APPLICATION DETAIL MODAL (HC) ======================== -->
+    <div id="modal-app-detail" class="modal-overlay" style="display:none;">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Szczegóły podania</h3>
+                <button class="modal-close" data-close="modal-app-detail">&times;</button>
+            </div>
+            <div class="modal-body" id="app-detail-body">
+            </div>
+            <div class="modal-footer">
+                <div class="input-group" style="width:100%">
+                    <label for="app-reason">Powód decyzji (wymagany)</label>
+                    <textarea id="app-reason" rows="3" placeholder="Wpisz powód akceptacji lub odrzucenia..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button id="btn-accept-app" class="btn-success">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        Akceptuj
+                    </button>
+                    <button id="btn-reject-app" class="btn-danger">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        Odrzuć
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================== MAIL READ MODAL ======================== -->
+    <div id="modal-mail" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="mail-modal-subject">Temat</h3>
+                <button class="modal-close" data-close="modal-mail">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="mail-meta"><strong>Od:</strong> <span id="mail-modal-from"></span></p>
+                <p class="mail-meta"><strong>Data:</strong> <span id="mail-modal-date"></span></p>
+                <hr class="divider">
+                <div id="mail-modal-body" class="mail-body-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================== MAIN APP LAYOUT ======================== -->
+    <div id="app" style="display:none;">
+
+        <!-- ======== SIDEBAR ======== -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <svg width="32" height="32" viewBox="0 0 80 80" fill="none">
+                    <circle cx="40" cy="40" r="38" stroke="#2196F3" stroke-width="2" fill="none"/>
+                    <path d="M25 55 L40 20 L55 55" stroke="#2196F3" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <line x1="30" y1="45" x2="50" y2="45" stroke="#2196F3" stroke-width="2"/>
+                </svg>
+                <span class="sidebar-title">STATE PANEL</span>
+            </div>
+            <ul class="sidebar-menu" id="sidebar-menu">
+                <!-- Dowód Osobisty -->
+                <li data-view="view-id" class="active">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="5" width="20" height="14" rx="2"/>
+                        <line x1="2" y1="10" x2="22" y2="10"/>
+                    </svg>
+                    <span>Dowód Osobisty</span>
+                </li>
+                <!-- Ekonomia -->
+                <li data-view="view-economy">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    <span>Ekonomia & Krypto</span>
+                </li>
+                <!-- StateMail -->
+                <li data-view="view-mail">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    <span>StateMail</span>
+                    <span class="badge-unread" id="mail-badge" style="display:none;">0</span>
+                </li>
+                <!-- Rekrutacja -->
+                <li data-view="view-recruitment">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                    <span>Rekrutacja</span>
+                </li>
+                <!-- Rejestr -->
+                <li data-view="view-registry">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                    </svg>
+                    <span>Rejestr Centralny</span>
+                </li>
+                <!-- LSPD MDT -->
+                <li data-view="view-mdt" class="role-required" data-roles="LSPD,LSPD_HC,ADMIN">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span>LSPD MDT</span>
+                </li>
+                <!-- Księgowość -->
+                <li data-view="view-invoices" class="role-required" data-roles="EMS,EMS_HC,LSC,LSC_HC,FIRMA,ADMIN">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                        <line x1="1" y1="10" x2="23" y2="10"/>
+                    </svg>
+                    <span>Księgowość</span>
+                </li>
+                <!-- HC Management -->
+                <li data-view="view-hc" class="role-required" data-roles="LSPD_HC,EMS_HC,LSC_HC,DOJ_HC,ADMIN">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span>Zarządzanie HC</span>
+                </li>
+                <!-- DOJ -->
+                <li data-view="view-doj" class="role-required" data-roles="DOJ,DOJ_HC,ADMIN">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <span>Nadzór DOJ</span>
+                </li>
+                <!-- ZPA -->
+                <li data-view="view-admin" class="role-required" data-roles="ADMIN">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    <span>ZPA (Admin)</span>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <span class="user-name" id="sidebar-user">Użytkownik</span>
+                    <span class="user-ssn" id="sidebar-ssn">SSN: ---</span>
+                </div>
+                <button id="btn-logout" class="btn-logout">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Wyloguj
+                </button>
+            </div>
+        </nav>
+
+        <!-- ======== MAIN CONTENT AREA ======== -->
+        <div id="main-area">
+            <header id="top-bar">
+                <button id="sidebar-toggle" aria-label="Menu">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+                <h2 id="view-title">Dowód Osobisty</h2>
+                <div id="system-clock" class="system-clock">--:-- | --.--.----</div>
+            </header>
+
+            <div class="content-wrapper">
+
+                <!-- ============ VIEW: DOWÓD OSOBISTY (MODULE 1) ============ -->
+                <section id="view-id" class="view active">
+                    <div class="id-card">
+                        <div class="id-hologram"></div>
+                        <div class="id-header-bar">
+                            <svg width="40" height="40" viewBox="0 0 80 80" fill="none">
+                                <circle cx="40" cy="40" r="38" stroke="#fff" stroke-width="1.5" fill="none" opacity="0.4"/>
+                                <path d="M25 55 L40 20 L55 55" stroke="#fff" stroke-width="2" fill="none" opacity="0.6"/>
+                                <line x1="30" y1="45" x2="50" y2="45" stroke="#fff" stroke-width="1.5" opacity="0.6"/>
+                            </svg>
+                            <div>
+                                <h3>DOWÓD OSOBISTY</h3>
+                                <span class="id-state-label">State of San Andreas</span>
+                            </div>
+                        </div>
+                        <div class="id-body">
+                            <div class="id-photo-placeholder">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </div>
+                            <div class="id-details">
+                                <div class="id-row"><span class="id-label">IMIĘ</span><span id="id-name" class="id-value">-</span></div>
+                                <div class="id-row"><span class="id-label">NAZWISKO</span><span id="id-surname" class="id-value">-</span></div>
+                                <div class="id-row"><span class="id-label">SSN</span><span id="id-ssn" class="id-value">-</span></div>
+                                <div class="id-row"><span class="id-label">WIEK</span><span id="id-age" class="id-value">-</span></div>
+                                <div class="id-row"><span class="id-label">PŁEĆ</span><span id="id-gender" class="id-value">-</span></div>
+                                <div class="id-row"><span class="id-label">NARODOWOŚĆ</span><span id="id-nat" class="id-value">-</span></div>
+                                <div class="id-row"><span class="id-label">WZROST</span><span id="id-height" class="id-value">-</span></div>
+                            </div>
+                        </div>
+                        <div class="id-licenses-section">
+                            <h4>UPRAWNIENIA STANOWE</h4>
+                            <div class="license-grid">
+                                <div class="license-row">
+                                    <span class="lic-label">Prawo Jazdy Kat. B:</span>
+                                    <span id="lic-driveB" class="lic-status lic-no">Brak</span>
+                                </div>
+                                <div class="license-row">
+                                    <span class="lic-label">Prawo Jazdy Kat. C:</span>
+                                    <span id="lic-driveC" class="lic-status lic-no">Brak</span>
+                                </div>
+                                <div class="license-row">
+                                    <span class="lic-label">Licencja na Broń (CCW):</span>
+                                    <span id="lic-weapon" class="lic-status lic-no">Brak</span>
+                                </div>
+                                <div class="license-row">
+                                    <span class="lic-label">Punkty Karne:</span>
+                                    <span id="lic-penalty" class="lic-status">0 / 24</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ VIEW: EKONOMIA (MODULE 2) ============ -->
+                <section id="view-economy" class="view">
+                    <div class="economy-grid">
+                        <!-- Bank -->
+                        <div class="panel-card">
+                            <div class="panel-card-header">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                    <line x1="1" y1="10" x2="23" y2="10"/>
+                                </svg>
+                                <h3>Konto Bankowe</h3>
+                            </div>
+                            <div class="bank-balance">
+                                <span class="balance-label">Saldo</span>
+                                <span class="balance-value" id="bank-balance">$0.00</span>
+                            </div>
+                            <div class="bank-actions">
+                                <button id="btn-quick-job" class="btn-primary btn-sm">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+                                    Praca dorywcza
+                                </button>
+                                <span id="job-cooldown" class="cooldown-text" style="display:none;">Cooldown: <span id="job-timer">0</span>s</span>
+                            </div>
+                            <hr class="divider">
+                            <h4 class="sub-title">Przelew bankowy</h4>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="transfer-ssn">SSN odbiorcy</label>
+                                    <input type="text" id="transfer-ssn" placeholder="9 cyfr SSN" maxlength="9">
+                                </div>
+                                <div class="input-group">
+                                    <label for="transfer-amount">Kwota ($)</label>
+                                    <input type="number" id="transfer-amount" placeholder="100" min="1">
+                                </div>
+                            </div>
+                            <button id="btn-transfer" class="btn-primary btn-sm btn-block">Wykonaj przelew</button>
+                        </div>
+
+                        <!-- Crypto Terminal -->
+                        <div class="panel-card panel-card-wide">
+                            <div class="panel-card-header">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                                </svg>
+                                <h3>Terminal Krypto</h3>
+                            </div>
+                            <div class="crypto-chart-container">
+                                <canvas id="crypto-chart" height="200"></canvas>
+                            </div>
+                            <div class="crypto-prices" id="crypto-prices">
+                                <div class="crypto-item" data-coin="BTC">
+                                    <span class="crypto-name">BTC</span>
+                                    <span class="crypto-price" id="price-BTC">$0</span>
+                                    <span class="crypto-owned" id="owned-BTC">0</span>
+                                    <div class="crypto-actions">
+                                        <input type="number" class="crypto-qty" id="qty-BTC" placeholder="Ilość" min="0.001" step="0.001">
+                                        <button class="btn-buy" data-coin="BTC">Kup</button>
+                                        <button class="btn-sell" data-coin="BTC">Sprzedaj</button>
+                                    </div>
+                                </div>
+                                <div class="crypto-item" data-coin="ETH">
+                                    <span class="crypto-name">ETH</span>
+                                    <span class="crypto-price" id="price-ETH">$0</span>
+                                    <span class="crypto-owned" id="owned-ETH">0</span>
+                                    <div class="crypto-actions">
+                                        <input type="number" class="crypto-qty" id="qty-ETH" placeholder="Ilość" min="0.001" step="0.001">
+                                        <button class="btn-buy" data-coin="ETH">Kup</button>
+                                        <button class="btn-sell" data-coin="ETH">Sprzedaj</button>
+                                    </div>
+                                </div>
+                                <div class="crypto-item" data-coin="LTC">
+                                    <span class="crypto-name">LTC</span>
+                                    <span class="crypto-price" id="price-LTC">$0</span>
+                                    <span class="crypto-owned" id="owned-LTC">0</span>
+                                    <div class="crypto-actions">
+                                        <input type="number" class="crypto-qty" id="qty-LTC" placeholder="Ilość" min="0.001" step="0.001">
+                                        <button class="btn-buy" data-coin="LTC">Kup</button>
+                                        <button class="btn-sell" data-coin="LTC">Sprzedaj</button>
+                                    </div>
+                                </div>
+                                <div class="crypto-item" data-coin="DOGE">
+                                    <span class="crypto-name">DOGE</span>
+                                    <span class="crypto-price" id="price-DOGE">$0</span>
+                                    <span class="crypto-owned" id="owned-DOGE">0</span>
+                                    <div class="crypto-actions">
+                                        <input type="number" class="crypto-qty" id="qty-DOGE" placeholder="Ilość" min="0.1" step="0.1">
+                                        <button class="btn-buy" data-coin="DOGE">Kup</button>
+                                        <button class="btn-sell" data-coin="DOGE">Sprzedaj</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ VIEW: STATEMAIL (MODULE 3) ============ -->
+                <section id="view-mail" class="view">
+                    <div class="mail-layout">
+                        <div class="mail-list-panel">
+                            <div class="mail-list-header">
+                                <h3>Skrzynka odbiorcza</h3>
+                                <span class="mail-count" id="mail-count">0 wiadomości</span>
+                            </div>
+                            <div class="mail-list" id="mail-list">
+                                <p class="empty-state">Brak wiadomości</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ VIEW: REKRUTACJA (MODULE 4) ============ -->
+                <section id="view-recruitment" class="view">
+                    <div class="recruitment-container">
+                        <!-- Player application form -->
+                        <div class="panel-card recruitment-card">
+                            <div class="panel-card-header recruitment-header">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                                <h3>DEPARTAMENT REKRUTACJI</h3>
+                            </div>
+                            <p class="recruitment-info">Wypełnij formularz aplikacyjny, aby dołączyć do wybranej frakcji.</p>
+                            <div class="form-section">
+                                <h4>Pytania OOC</h4>
+                                <div class="input-group">
+                                    <label for="app-discord">Nick Discord</label>
+                                    <input type="text" id="app-discord" placeholder="Twój nick#1234">
+                                </div>
+                                <div class="input-group">
+                                    <label for="app-mic">Posiadasz mikrofon?</label>
+                                    <select id="app-mic">
+                                        <option value="">-- Wybierz --</option>
+                                        <option value="Tak">Tak</option>
+                                        <option value="Nie">Nie</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-section">
+                                <h4>Wybierz frakcję</h4>
+                                <div class="input-group">
+                                    <label for="app-faction">Frakcja</label>
+                                    <select id="app-faction">
+                                        <option value="">-- Wybierz frakcję --</option>
+                                        <option value="LSPD">LSPD (Policja)</option>
+                                        <option value="EMS">EMS (Ratownicy)</option>
+                                        <option value="LSC">LSC (Mechanicy)</option>
+                                        <option value="DOJ">DOJ (Departament Sprawiedliwości)</option>
+                                        <option value="FIRMA">FIRMA (Prywatna)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-section" id="ic-questions-section" style="display:none;">
+                                <h4>Pytania IC</h4>
+                                <div id="ic-questions-container"></div>
+                            </div>
+                            <button id="btn-send-app" class="btn-primary btn-block btn-recruitment">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                                Wyślij podanie
+                            </button>
+                        </div>
+
+                        <!-- HC: Pending applications list -->
+                        <div class="panel-card" id="hc-applications-panel" style="display:none;">
+                            <div class="panel-card-header">
+                                <h3>Podania do rozpatrzenia (HC)</h3>
+                            </div>
+                            <div id="hc-applications-list" class="applications-list">
+                                <p class="empty-state">Brak podań</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ VIEW: REJESTR CENTRALNY (MODULE 5) ============ -->
+                <section id="view-registry" class="view">
+                    <div class="panel-card">
+                        <div class="panel-card-header">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                            </svg>
+                            <h3>Centralny Rejestr — Twoja kartoteka</h3>
+                        </div>
+                        <div id="my-records-list" class="records-table-container">
+                            <p class="empty-state">Brak wpisów w kartotece</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ VIEW: LSPD MDT (MODULE 6) ============ -->
+                <section id="view-mdt" class="view">
+                    <div class="mdt-grid">
+                        <!-- Mandat -->
+                        <div class="panel-card">
+                            <div class="panel-card-header mdt-header">
+                                <h3>Formularz Mandatu</h3>
+                            </div>
+                            <div class="input-group">
+                                <label for="fine-ssn">SSN obywatela</label>
+                                <input type="text" id="fine-ssn" placeholder="9 cyfr" maxlength="9">
+                            </div>
+                            <div class="input-group">
+                                <label for="fine-amount">Kwota ($)</label>
+                                <input type="number" id="fine-amount" placeholder="500" min="1">
+                            </div>
+                            <div class="input-group">
+                                <label for="fine-reason">Powód</label>
+                                <textarea id="fine-reason" rows="2" placeholder="Powód mandatu..."></textarea>
+                            </div>
+                            <button id="btn-issue-fine" class="btn-primary btn-block">Wystaw mandat</button>
+                        </div>
+
+                        <!-- Wyrok -->
+                        <div class="panel-card">
+                            <div class="panel-card-header mdt-header">
+                                <h3>Formularz Wyroku</h3>
+                            </div>
+                            <div class="input-group">
+                                <label for="sentence-ssn">SSN obywatela</label>
+                                <input type="text" id="sentence-ssn" placeholder="9 cyfr" maxlength="9">
+                            </div>
+                            <div class="input-group">
+                                <label for="sentence-amount">Grzywna ($)</label>
+                                <input type="number" id="sentence-amount" placeholder="1000" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label for="sentence-months">Odsiadka (miesiące)</label>
+                                <input type="number" id="sentence-months" placeholder="6" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label for="sentence-reason">Powód wyroku</label>
+                                <textarea id="sentence-reason" rows="2" placeholder="Opis wyroku..."></textarea>
+                            </div>
+                            <button id="btn-issue-sentence" class="btn-primary btn-block">Wydaj wyrok</button>
+                        </div>
+
+                        <!-- Wydział Drogówki -->
+                        <div class="panel-card">
+                            <div class="panel-card-header mdt-header">
+                                <h3>Wydział Drogówki</h3>
+                            </div>
+                            <div class="input-group">
+                                <label for="traffic-ssn">SSN obywatela</label>
+                                <input type="text" id="traffic-ssn" placeholder="9 cyfr" maxlength="9">
+                            </div>
+                            <button id="btn-check-license" class="btn-secondary btn-block">Sprawdź prawo jazdy</button>
+                            <div id="traffic-result" class="traffic-result" style="display:none;"></div>
+                            <hr class="divider">
+                            <div class="input-group">
+                                <label for="penalty-points">Dodaj punkty karne</label>
+                                <input type="number" id="penalty-points" placeholder="Ilość punktów" min="1">
+                            </div>
+                            <button id="btn-add-penalty" class="btn-danger btn-block">Dodaj punkty karne</button>
+                        </div>
+
+                        <!-- Lista Poszukiwanych -->
+                        <div class="panel-card panel-card-wide">
+                            <div class="panel-card-header mdt-header">
+                                <h3>Lista Poszukiwanych (Wanted)</h3>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="wanted-ssn">SSN</label>
+                                    <input type="text" id="wanted-ssn" placeholder="9 cyfr" maxlength="9">
+                                </div>
+                                <div class="input-group">
+                                    <label for="wanted-name">Imię i Nazwisko</label>
+                                    <input type="text" id="wanted-name" placeholder="Imię Nazwisko">
+                                </div>
+                                <div class="input-group">
+                                    <label for="wanted-reason">Powód</label>
+                                    <input type="text" id="wanted-reason" placeholder="Powód poszukiwania">
+                                </div>
+                            </div>
+                            <button id="btn-add-wanted" class="btn-danger btn-sm">Dodaj do listy</button>
+                            <hr class="divider">
+                            <div id="wanted-list" class="wanted-list">
+                                <p class="empty-state">Lista pusta</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ VIEW: KSIĘGOWOŚĆ (MODULE 7) ============ -->
+                <section id="view-invoices" class="view">
+                    <div class="invoices-layout">
+                        <div class="panel-card">
+                            <div class="panel-card-header">
+                                <h3>Wystaw fakturę</h3>
+                            </div>
+                            <div class="input-group">
+                                <label for="inv-ssn">SSN odbiorcy</label>
+                                <input type="text" id="inv-ssn" placeholder="9 cyfr" maxlength="9">
+                            </div>
+                            <div class="input-group">
+                                <label for="inv-amount">Kwota ($)</label>
+                                <input type="number" id="inv-amount" placeholder="500" min="1">
+                            </div>
+                            <div class="input-group">
+                                <label for="inv-desc">Opis usługi</label>
+                                <textarea id="inv-desc" rows="2" placeholder="Opis usługi / towaru..."></textarea>
+                            </div>
+                            <button id="btn-issue-invoice" class="btn-primary btn-block">Wystaw fakturę</button>
+                        </div>
+                        <div class="panel-card">
+                            <div class="panel-card-header">
+                                <h3>Wystawione faktury</h3>
+                            </div>
+                            <div id="invoices-list" class="records-table-container">
+                                <p class="empty-state">Brak faktur</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ VIEW: ZARZĄDZANIE HC (MODULE 8) ============ -->
+                <section id="view-hc" class="view">
+                    <div class="panel-card">
+                        <div class="panel-card-header">
+                            <h3>Zarządzanie kadrami (HC)</h3>
+                        </div>
+                        <p class="info-text">Jako zarząd (HC), możesz zwalniać pracowników ze swojej frakcji.</p>
+                        <div class="input-group">
+                            <label for="hc-fire-ssn">SSN pracownika do zwolnienia</label>
+                            <input type="text" id="hc-fire-ssn" placeholder="9 cyfr" maxlength="9">
+                        </div>
+                        <button id="btn-fire-employee" class="btn-danger btn-block">Zwolnij pracownika</button>
+                        <hr class="divider">
+                        <h4>Pracownicy Twojej frakcji</h4>
+                        <div id="hc-employees-list" class="records-table-container">
+                            <p class="empty-state">Brak pracowników</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ VIEW: NADZÓR DOJ (MODULE 8) ============ -->
+                <section id="view-doj" class="view">
+                    <div class="doj-layout">
+                        <div class="panel-card">
+                            <div class="panel-card-header">
+                                <h3>Wszystkie wyroki</h3>
+                            </div>
+                            <div id="doj-sentences-list" class="records-table-container">
+                                <p class="empty-state">Brak wyroków w systemie</p>
+                            </div>
+                        </div>
+                        <div class="panel-card">
+                            <div class="panel-card-header">
+                                <h3>Wszystkie faktury</h3>
+                            </div>
+                            <div id="doj-invoices-list" class="records-table-container">
+                                <p class="empty-state">Brak faktur w systemie</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ VIEW: ZPA - ADMIN PANEL (MODULE 9) ============ -->
+                <section id="view-admin" class="view">
+                    <div class="admin-layout">
+                        <!-- Search -->
+                        <div class="panel-card">
+                            <div class="panel-card-header">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                </svg>
+                                <h3>Wyszukaj gracza</h3>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group" style="flex:1">
+                                    <label for="admin-search">Login gracza</label>
+                                    <input type="text" id="admin-search" placeholder="Wpisz dokładny login...">
+                                </div>
+                                <button id="btn-admin-search" class="btn-primary btn-sm" style="align-self:flex-end;">Szukaj</button>
+                            </div>
+                        </div>
+
+                        <!-- Edit Panel -->
+                        <div class="panel-card" id="admin-edit-panel" style="display:none;">
+                            <div class="panel-card-header">
+                                <h3>Edycja konta: <span id="admin-edit-name">-</span></h3>
+                            </div>
+                            <div class="admin-form-grid">
+                                <div class="input-group">
+                                    <label for="admin-edit-login">Login</label>
+                                    <input type="text" id="admin-edit-login">
+                                </div>
+                                <div class="input-group">
+                                    <label for="admin-edit-pass">Nowe hasło</label>
+                                    <input type="text" id="admin-edit-pass" placeholder="Zostaw puste = bez zmiany">
+                                </div>
+                                <div class="input-group">
+                                    <label for="admin-edit-bank">Saldo bankowe ($)</label>
+                                    <input type="number" id="admin-edit-bank">
+                                </div>
+                            </div>
+                            <hr class="divider">
+                            <h4>Role (zaznacz aktywne)</h4>
+                            <div class="roles-grid" id="admin-roles-grid">
+                                <label class="role-checkbox"><input type="checkbox" data-role="Obywatel" checked disabled> Obywatel</label>
+                                <label class="role-checkbox"><input type="checkbox" data-role="LSPD"> LSPD</label>
+                                <label class="role-checkbox"><input type="checkbox" data-role="LSPD_HC"> LSPD_HC</label>
+                                <label class="role-checkbox"><input type="checkbox" data-role="EMS"> EMS</label>
+                                <label class="role-checkbox"><input type="checkbox" data-role="EMS_HC"> EMS_HC</label>
+                                <label class="role-checkbox"><input type="checkbox" data-role="LSC"> LSC</label>
+                                <label class="role-checkbox"><input type="checkbox" data-role="LSC_HC"> LSC_HC</label>
+                                <label class="role-checkbox"><input type="checkbox" data-role="DOJ"> DOJ</label>
+                                <label class="role-checkbox"><input type="checkbox" data-role="DOJ_HC"> DOJ_HC</label>
+                                <label class="role-checkbox"><input type="checkbox" data-role="FIRMA"> FIRMA</label>
+                                <label class="role-checkbox"><input type="checkbox" data-role="ADMIN"> ADMIN</label>
+                            </div>
+                            <hr class="divider">
+                            <h4>Panel Licencji Administracyjnych</h4>
+                            <div class="licenses-admin-grid">
+                                <label class="role-checkbox"><input type="checkbox" id="admin-lic-driveB"> Prawo Jazdy Kat. B</label>
+                                <label class="role-checkbox"><input type="checkbox" id="admin-lic-driveC"> Prawo Jazdy Kat. C</label>
+                                <label class="role-checkbox"><input type="checkbox" id="admin-lic-weapon"> Licencja na Broń (CCW)</label>
+                            </div>
+                            <button id="btn-admin-reset-penalty" class="btn-secondary btn-sm">Wyzeruj punkty karne</button>
+                            <hr class="divider">
+                            <button id="btn-admin-save" class="btn-primary btn-block">Zapisz zmiany</button>
+                            <hr class="divider">
+                            <div class="danger-zone">
+                                <h4 class="danger-title">STREFA NIEBEZPIECZEŃSTWA</h4>
+                                <div class="danger-actions">
+                                    <button id="btn-admin-clear-records" class="btn-danger">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                        Wyczyść kartotekę
+                                    </button>
+                                    <button id="btn-admin-wipe" class="btn-danger btn-wipe">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                        WIPE (Usuń postać)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div><!-- /content-wrapper -->
+        </div><!-- /main-area -->
+    </div><!-- /app -->
 
     <script src="script.js"></script>
 </body>
 </html>
-
